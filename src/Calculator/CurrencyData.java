@@ -7,7 +7,9 @@ package Calculator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,7 +30,7 @@ public class CurrencyData {
     
     private HashMap<String, Float> currencies = new HashMap<String, Float>();
     
-    public CurrencyData() throws ParserConfigurationException{
+    public void readFromFile() throws ParserConfigurationException{
         
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         
@@ -60,7 +62,22 @@ public class CurrencyData {
           e.printStackTrace();
       }
     }
+    public List<String> getCurrency(){
+        List<String> list = new ArrayList<String>();
+        for (String i : currencies.keySet()) {
+            list.add(i);
+        }
+        return list;
+    }
+    
+    public String getResult(float value, String cur){
+        return String.valueOf(currencies.get(cur)*value);
+    }
+    
     public static void main(String[] args) throws ParserConfigurationException {
         CurrencyData c = new CurrencyData();
+        c.readFromFile();
+        System.out.println(c.getResult(5, "PLN"));
+        
     }
 }
