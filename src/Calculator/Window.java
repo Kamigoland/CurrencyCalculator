@@ -32,10 +32,15 @@ public class Window extends javax.swing.JFrame {
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for(String c:cd.getCurrency()){
-            this.currencyComboBox.addItem(c);
+        if (!cd.getCurrency().isEmpty()){
+            for(String c:cd.getCurrency()){
+                this.currencyComboBox.addItem(c);
+            }
+        }else{
+            this.currencyComboBox.setEnabled(false);
+            this.valueInEuro.setEnabled(false);
+            this.resultTextField.setText("Can't load currencies!");
         }
-        //this.currencyComboBox.setSelectedIndex(-1);
     }
     
     private void calculate(){
