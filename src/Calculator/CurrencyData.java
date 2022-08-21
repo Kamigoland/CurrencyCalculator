@@ -59,7 +59,8 @@ public class CurrencyData {
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
-          e.printStackTrace();
+          //e.printStackTrace();
+          System.out.println("Can't read a file! " + e);
       }
     }
     public List<String> getCurrency(){
