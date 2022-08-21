@@ -73,11 +73,4 @@ public class CurrencyData {
     public String getResult(float value, String cur){
         return String.valueOf(currencies.get(cur)*value);
     }
-    
-    public static void main(String[] args) throws ParserConfigurationException {
-        CurrencyData c = new CurrencyData();
-        c.readFromFile();
-        System.out.println(c.getResult(5, "PLN"));
-        
-    }
 }

@@ -35,12 +35,34 @@ public class Window extends javax.swing.JFrame {
         for(String c:cd.getCurrency()){
             this.currencyComboBox.addItem(c);
         }
-        this.currencyComboBox.setSelectedIndex(-1);
+        //this.currencyComboBox.setSelectedIndex(-1);
     }
     
     private void calculate(){
-        this.resultTextField.setText(cd.getResult(Float.parseFloat(this.valueInEuro.getText()), 
+        try{
+            float Euro = Float.parseFloat(this.valueInEuro.getText());
+            this.resultTextField.setText(cd.getResult(Euro, 
                 this.currencyComboBox.getSelectedItem().toString()));
+        }catch (NumberFormatException  e) {
+            this.resultTextField.setText("Wrong Euro Value!");
+        }catch(NullPointerException e){
+            this.resultTextField.setText("Can't load XML file!");
+        }
+    }
+    
+    private void CorrectingValueInEuro(){
+        this.valueInEuro.setText(this.valueInEuro.getText().replace(",", "."));
+        this.valueInEuro.setText(this.valueInEuro.getText().replace("-", ""));
+        this.valueInEuro.setText(this.valueInEuro.getText().trim());
+        if (this.valueInEuro.getText().isEmpty()) {
+            this.valueInEuro.setText("0");
+        }
+        if(this.valueInEuro.getText().length()>1&&
+                this.valueInEuro.getText().charAt(0)=='0'){
+            this.valueInEuro.setText(this.valueInEuro.
+                    getText().replaceFirst("0", ""));
+        }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,6 +81,7 @@ public class Window extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Currency Calculator");
+        setResizable(false);
 
         jLabel1.setText("EURO:");
 
@@ -66,6 +89,11 @@ public class Window extends javax.swing.JFrame {
         valueInEuro.setText("1");
         valueInEuro.setToolTipText("Enter Value");
         valueInEuro.setMinimumSize(new java.awt.Dimension(64, 222));
+        valueInEuro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                valueInEuroKeyReleased(evt);
+            }
+        });
 
         jLabel2.setText("Select Currency:");
 
@@ -86,12 +114,15 @@ public class Window extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(valueInEuro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(resultTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(currencyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(valueInEuro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(0, 53, Short.MAX_VALUE))
+                    .addComponent(currencyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(resultTextField))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,6 +147,12 @@ public class Window extends javax.swing.JFrame {
         // TODO add your handling code here:
         calculate();
     }//GEN-LAST:event_currencyComboBoxActionPerformed
+
+    private void valueInEuroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valueInEuroKeyReleased
+        // TODO add your handling code here:
+        CorrectingValueInEuro();
+        calculate();
+    }//GEN-LAST:event_valueInEuroKeyReleased
 
     /**
      * @param args the command line arguments
